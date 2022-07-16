@@ -1,10 +1,10 @@
 package isolatedmarginclientexample
 
 import (
-	"github.com/huobirdcenter/huobi_golang/config"
-	"github.com/huobirdcenter/huobi_golang/logging/applogger"
-	"github.com/huobirdcenter/huobi_golang/pkg/client"
-	"github.com/huobirdcenter/huobi_golang/pkg/model/margin"
+	"github.com/Reza-Amani/huobi_golang/config"
+	"github.com/Reza-Amani/huobi_golang/logging/applogger"
+	"github.com/Reza-Amani/huobi_golang/pkg/client"
+	"github.com/Reza-Amani/huobi_golang/pkg/model/margin"
 )
 
 func RunAllExamples() {
