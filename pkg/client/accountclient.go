@@ -3,11 +3,13 @@ package client
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
+	"strconv"
+
 	"github.com/huobirdcenter/huobi_golang/internal"
 	"github.com/huobirdcenter/huobi_golang/internal/requestbuilder"
 	"github.com/huobirdcenter/huobi_golang/pkg/model"
 	"github.com/huobirdcenter/huobi_golang/pkg/model/account"
-	"strconv"
 )
 
 // Responsible to operate account
@@ -42,22 +44,22 @@ func (p *AccountClient) GetAccountInfo() ([]account.AccountInfo, error) {
 }
 
 // Returns the balance of an account specified by account id
-func (p *AccountClient) GetAccountBalance(accountId string) (*account.AccountBalance, error) {
+func (p *AccountClient) GetAccountBalance(accountId string) (*account.AccountBalance, string, error) {
 	url := p.privateUrlBuilder.Build("GET", "/v1/account/accounts/"+accountId+"/balance", nil)
 	getResp, getErr := internal.HttpGet(url)
 	if getErr != nil {
-		return nil, getErr
+		return nil, getResp, getErr
 	}
 	result := account.GetAccountBalanceResponse{}
 	jsonErr := json.Unmarshal([]byte(getResp), &result)
 	if jsonErr != nil {
-		return nil, jsonErr
+		return nil, getResp, jsonErr
 	}
-	if result.Status == "ok" && result.Data != nil {
-		return result.Data, nil
+	status := fmt.Sprintf("%v", result.Status)
+	if status != "ok" {
+		return nil, getResp, errors.New(status)
 	}
-
-	return nil, errors.New(getResp)
+	return result.Data, "", nil
 }
 
 // Returns the valuation of the total assets of the account in btc or fiat currency.
@@ -220,7 +222,6 @@ func (p *AccountClient) FuturesTransfer(request account.FuturesTransferRequest) 
 	}
 	return result.Data, nil
 }
-
 
 // Returns the point balance of specified user's account
 func (p *AccountClient) GetPointBalance(subUid string) (*account.GetPointBalanceResponse, error) {
