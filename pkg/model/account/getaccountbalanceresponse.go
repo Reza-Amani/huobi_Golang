@@ -1,14 +1,14 @@
 package account
 
 type GetAccountBalanceResponse struct {
-	Status string          `json:"status"`
+	Status interface{}     `json:"status"`
 	Data   *AccountBalance `json:"data"`
 }
 
 type AccountBalance struct {
-	Id    int       `json:"id"`
-	Type  string    `json:"type"`
-	State string    `json:"state"`
+	Id    int               `json:"id"`
+	Type  string            `json:"type"`
+	State string            `json:"state"`
 	List  []CurrencyBalance `json:"list"`
 }
 
